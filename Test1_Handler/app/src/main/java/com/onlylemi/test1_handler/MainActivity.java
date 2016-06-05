@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
             // 方法2
             handler.sendEmptyMessage(1);
+            Message msg = Message.obtain();
 
             // 方法3
 //            runOnUiThread(new Runnable() {

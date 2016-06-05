@@ -53,7 +53,7 @@ public class SecondActivity extends AppCompatActivity {
             Looper.prepare();
             looper = Looper.myLooper();
 
-            handler1 = new Handler() {
+            handler1 = new Handler(thread.looper) {
                 @Override
                 public void handleMessage(Message msg) {
                     Log.i(TAG + " thread:", Thread.currentThread().getName());
