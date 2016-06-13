@@ -2,6 +2,7 @@ package com.onlylemi.test4_lizhi.json;
 
 import com.google.gson.Gson;
 import com.onlylemi.test4_lizhi.entity.Paramz;
+import com.onlylemi.test4_lizhi.entity.Place;
 
 import java.io.IOException;
 
@@ -47,6 +48,35 @@ public class JsonUtils {
                                         Paramz.class);
                                 if (null != paramz) {
                                     subscriber.onNext(paramz);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public Observable<Place> getJsonPlace(final String url) {
+
+        return Observable.create(new Observable.OnSubscribe<Place>() {
+            @Override
+            public void call(final Subscriber<? super Place> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    Request request = new Request.Builder().url(url).build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                Place place = new Gson().fromJson(response.body().string(),
+                                        Place.class);
+                                if (null != place) {
+                                    subscriber.onNext(place);
                                 }
                             }
                         }

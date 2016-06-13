@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/inslab_logo"/>
+
+    <TextView
+        android:id="@+id/cnname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/cover"
+        android:layout_toRightOf="@+id/cover"
+        android:padding="10dp"
+        android:text="京都"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TextView
+        android:id="@+id/category_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cnname"
+        android:layout_toEndOf="@+id/cover"
+        android:layout_toRightOf="@+id/cover"
+        android:padding="10dp"
+        android:text="亚洲/日本"/>
+
+    <TextView
+        android:id="@+id/update_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cover"
+        android:layout_toEndOf="@+id/cover"
+        android:layout_toRightOf="@+id/cover"
+        android:paddingLeft="10dp"
+        android:text="2016-06-11更新"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <ImageView
+        android:id="@+id/download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="43dp"
+        android:layout_marginRight="43dp"
+        android:src="@mipmap/ic_launcher"/>
+</RelativeLayout>
