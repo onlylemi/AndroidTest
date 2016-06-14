@@ -6,8 +6,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.onlylemi.test6_qiongyou.R;
+import com.onlylemi.test6_qiongyou.adapter.GuideAdapter;
+import com.onlylemi.test6_qiongyou.common.CommonURL;
+import com.onlylemi.test6_qiongyou.entity.StateEntity;
+import com.onlylemi.test6_qiongyou.json.JsonUtils;
+
+import java.util.List;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Fragment3
@@ -18,6 +29,11 @@ import com.onlylemi.test6_qiongyou.R;
 public class Fragment3 extends Fragment {
 
     private View mMainView;
+    private GridView gridView;
+
+    private GuideAdapter adapter;
+
+    private JsonUtils jsonUtils;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +44,34 @@ public class Fragment3 extends Fragment {
                 .id.view_pager), false);
 
 
+        gridView = (GridView) mMainView.findViewById(R.id.gridview);
+        adapter = new GuideAdapter(getActivity());
+        gridView.setAdapter(adapter);
+
+        jsonUtils = new JsonUtils();
+        jsonUtils.getStateJson(CommonURL.NORTH_AMERICA_PATH)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<StateEntity>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(StateEntity stateEntity) {
+                        if (null != stateEntity) {
+                            List<StateEntity.DataBean> list = stateEntity.getData();
+                            adapter.bindList(list);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
 
     @Nullable

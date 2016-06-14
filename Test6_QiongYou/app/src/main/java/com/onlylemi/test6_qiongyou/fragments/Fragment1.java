@@ -6,10 +6,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.GridView;
 
 import com.onlylemi.test6_qiongyou.R;
+import com.onlylemi.test6_qiongyou.adapter.GuideAdapter;
+import com.onlylemi.test6_qiongyou.common.CommonURL;
+import com.onlylemi.test6_qiongyou.entity.StateEntity;
+import com.onlylemi.test6_qiongyou.json.JsonUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Fragment1
@@ -19,8 +29,12 @@ import com.onlylemi.test6_qiongyou.R;
  */
 public class Fragment1 extends Fragment {
 
-    private Button button;
     private View mMainView;
+    private GridView gridView;
+
+    private GuideAdapter adapter;
+
+    private JsonUtils jsonUtils;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,14 +45,41 @@ public class Fragment1 extends Fragment {
         mMainView = inflater.inflate(R.layout.fragment1, (ViewGroup) getActivity().findViewById(
                 R.id.view_pager), false);
 
-        button = (Button) mMainView.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity().getApplicationContext(), "Click me!", Toast
-                        .LENGTH_SHORT).show();
-            }
-        });
+        gridView = (GridView) mMainView.findViewById(R.id.gridview);
+        adapter = new GuideAdapter(getActivity());
+        gridView.setAdapter(adapter);
+
+        jsonUtils = new JsonUtils();
+        jsonUtils.getStateJson(CommonURL.ASIA_PATH)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<StateEntity>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(StateEntity stateEntity) {
+                        if (null != stateEntity) {
+                            List<StateEntity.DataBean.GuidesBean> list = new ArrayList<>();
+
+                            for (StateEntity.DataBean datas : stateEntity.getData()) {
+                                for (StateEntity.DataBean.GuidesBean guide : datas.getGuides()) {
+                                    list.add(guide);
+                                }
+                            }
+
+                            adapter.bindList(list);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
     }
 
     @Nullable
@@ -51,4 +92,6 @@ public class Fragment1 extends Fragment {
         }
         return mMainView;
     }
+
+
 }
