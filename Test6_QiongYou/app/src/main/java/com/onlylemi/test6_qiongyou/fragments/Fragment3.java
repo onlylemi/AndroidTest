@@ -14,6 +14,7 @@ import com.onlylemi.test6_qiongyou.common.CommonURL;
 import com.onlylemi.test6_qiongyou.entity.StateEntity;
 import com.onlylemi.test6_qiongyou.json.JsonUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
@@ -66,7 +67,14 @@ public class Fragment3 extends Fragment {
                     @Override
                     public void onNext(StateEntity stateEntity) {
                         if (null != stateEntity) {
-                            List<StateEntity.DataBean> list = stateEntity.getData();
+                            List<StateEntity.DataBean.GuidesBean> list = new ArrayList<>();
+
+                            for (StateEntity.DataBean data : stateEntity.getData()) {
+                                for (StateEntity.DataBean.GuidesBean guide : data.getGuides()) {
+                                    list.add(guide);
+                                }
+                            }
+
                             adapter.bindList(list);
                             adapter.notifyDataSetChanged();
                         }

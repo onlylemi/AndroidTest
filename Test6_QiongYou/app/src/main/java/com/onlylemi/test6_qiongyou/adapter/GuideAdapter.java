@@ -67,6 +67,7 @@ public class GuideAdapter extends BaseAdapter {
 
         Picasso.with(context)
                 .load(list.get(position).getCover() + "/670_446.jpg")
+                .placeholder(R.drawable.guide_place_holder)
                 .centerCrop()
                 .resize(250, 400)
                 .into(holder.cover);
@@ -75,6 +76,8 @@ public class GuideAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+
 
     static class ViewHolder {
         ImageView cover;

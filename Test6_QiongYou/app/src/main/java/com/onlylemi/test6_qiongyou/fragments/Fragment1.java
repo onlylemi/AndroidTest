@@ -69,8 +69,8 @@ public class Fragment1 extends Fragment {
                         if (null != stateEntity) {
                             List<StateEntity.DataBean.GuidesBean> list = new ArrayList<>();
 
-                            for (StateEntity.DataBean datas : stateEntity.getData()) {
-                                for (StateEntity.DataBean.GuidesBean guide : datas.getGuides()) {
+                            for (StateEntity.DataBean data : stateEntity.getData()) {
+                                for (StateEntity.DataBean.GuidesBean guide : data.getGuides()) {
                                     list.add(guide);
                                 }
                             }
