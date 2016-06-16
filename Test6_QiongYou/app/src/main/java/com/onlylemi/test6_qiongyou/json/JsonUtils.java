@@ -3,6 +3,7 @@ package com.onlylemi.test6_qiongyou.json;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.onlylemi.test6_qiongyou.entity.DetailEntity;
 import com.onlylemi.test6_qiongyou.entity.StateEntity;
 
 import java.io.IOException;
@@ -31,6 +32,12 @@ public class JsonUtils {
         client = new OkHttpClient().newBuilder().build();
     }
 
+    /**
+     * 获取页面实体类
+     *
+     * @param url
+     * @return
+     */
     public Observable<StateEntity> getStateJson(final String url) {
         return Observable.create(new Observable.OnSubscribe<StateEntity>() {
             @Override
@@ -53,6 +60,36 @@ public class JsonUtils {
                                         StateEntity.class);
                                 if (null != stateEntity) {
                                     subscriber.onNext(stateEntity);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public Observable<DetailEntity> getDetailJson(final String url) {
+        return Observable.create(new Observable.OnSubscribe<DetailEntity>() {
+            @Override
+            public void call(final Subscriber<? super DetailEntity> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    final Request request = new Request.Builder().url(url).build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                String json_value = response.body().string();
+                                Log.i(TAG, "onResponse: json_value-->" + json_value);
+                                DetailEntity detailEntity = new Gson().fromJson(json_value,
+                                        DetailEntity.class);
+                                if (null != detailEntity) {
+                                    subscriber.onNext(detailEntity);
                                 }
                             }
                         }

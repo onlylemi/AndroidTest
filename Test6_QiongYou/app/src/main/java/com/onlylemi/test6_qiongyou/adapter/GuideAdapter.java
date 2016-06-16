@@ -41,7 +41,7 @@ public class GuideAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public StateEntity.DataBean.GuidesBean getItem(int position) {
         return list.get(position);
     }
 
@@ -76,7 +76,6 @@ public class GuideAdapter extends BaseAdapter {
 
         return convertView;
     }
-
 
 
     static class ViewHolder {

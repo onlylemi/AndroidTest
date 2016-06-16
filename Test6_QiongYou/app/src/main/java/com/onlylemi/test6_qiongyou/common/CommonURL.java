@@ -30,4 +30,13 @@ public class CommonURL {
             ".0&track_app_channel=wandoujia&track_device_info=vbox86p&track_os=Android5" +
             ".1&app_installtime=1465375818526&id=659";
 
+    /**
+     * 详情页面
+     */
+    public static final String SECOND_DETAIL_URL = "http://open.qyer" +
+            ".com/qyer/guide/detail?client_id=qyer_android&client_secret=9fcaae8aefc4f9ac4915&v=1" +
+            "&track_deviceid=9b4838d76ba0ac5f&track_app_version=6.9" +
+            ".0&track_app_channel=wandoujia&track_device_info=vbox86p&track_os=Android5" +
+            ".1&app_installtime=1465375818526&id=";
+
 }
