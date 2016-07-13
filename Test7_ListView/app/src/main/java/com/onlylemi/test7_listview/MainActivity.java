@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,12 +85,5 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.bindList(Arrays.asList(IMAGE_URLS));
         adapter.notifyDataSetChanged();
-
-        HashMap hashMap = new HashMap();
-        hashMap.entrySet().iterator();
-
-        LinkedHashMap linkedHashMap = new LinkedHashMap();
-        linkedHashMap.entrySet().iterator();
-
     }
 }

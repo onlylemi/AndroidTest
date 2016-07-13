@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@android:drawable/ic_menu_share"
+        android:duration="500"/>
+    <item
+        android:drawable="@android:drawable/ic_menu_today"
+        android:duration="500"/>
+    <item
+        android:drawable="@android:drawable/ic_menu_add"
+        android:duration="500"/>
+    <item
+        android:drawable="@android:drawable/ic_menu_agenda"
+        android:duration="500"/>
+    <item
+        android:drawable="@android:drawable/ic_menu_always_landscape_portrait"
+        android:duration="500"/>
+</animation-list>
