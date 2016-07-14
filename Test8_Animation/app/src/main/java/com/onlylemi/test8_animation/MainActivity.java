@@ -3,7 +3,6 @@ package com.onlylemi.test8_animation;
 import android.animation.IntEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -53,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // activity 跳转动画
-                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                startActivity(intent);
-                // 必须在startActivity之后调用
-                overridePendingTransition(R.anim.enter_anim, R.anim.exit_anim);
+//                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+//                startActivity(intent);
+//                // 必须在startActivity之后调用
+//                overridePendingTransition(R.anim.enter_anim, R.anim.exit_anim);
             }
         });
 
@@ -123,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
         //view.startAnimation(animation1);
 
-        view.startAnimation(alphaAnimation);
+        view.startAnimation(animation1);
     }
 
     /**
@@ -138,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startPropertyAnimation(final View view) {
-        view.clearAnimation();
         // 改变一个对象
 //        ObjectAnimator.ofFloat(view, "translationY", 500).start();
 //
@@ -190,6 +188,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         valueAnimator.start();
+
+//        performAnimate(view, view.getWidth(), 800);
     }
 
     private void performAnimate(final View target, final int start, final int end) {
