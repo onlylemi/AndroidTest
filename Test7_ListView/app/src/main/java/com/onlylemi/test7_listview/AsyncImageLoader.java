@@ -1,10 +1,12 @@
 package com.onlylemi.test7_listview;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.widget.ImageView;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -22,27 +24,31 @@ import java.security.NoSuchAlgorithmException;
  */
 public class AsyncImageLoader {
 
-    private static AsyncImageLoader instance;
+    private static AsyncImageLoader mLoader;
+
+    private static Context mContext;
 
     // 内存缓存默认 5M
     static final int MEMORY_CACHE_DEFAULT_SIZE = 5 * 1024 * 1024;
-    // 文件缓存默认 10M
+    // 文件缓存默认 50M
     static final int DISK_CACHE_DEFAULT_SIZE = 50 * 1024 * 1024;
     // 内存缓存
     private LruCache<String, Bitmap> mMemoryCache;
     // 磁盘缓存
     private DiskLruCache mDiskCache;
 
-    public AsyncImageLoader() {
+    public AsyncImageLoader(Context context) {
+        mContext = context.getApplicationContext();
+
         initMemoryCache();
-        initDiskCache();
+        initDiskCache(mContext);
     }
 
-    public static AsyncImageLoader getInstance() {
-        if (null == instance) {
-            instance = new AsyncImageLoader();
+    public static AsyncImageLoader with(Context context) {
+        if (null == mLoader) {
+            mLoader = new AsyncImageLoader(context);
         }
-        return instance;
+        return mLoader;
     }
 
     /**
@@ -62,9 +68,9 @@ public class AsyncImageLoader {
     /**
      * 初始化磁盘缓存
      */
-    private void initDiskCache() {
+    private void initDiskCache(Context context) {
         try {
-            File cacheDir = AppUtils.getDiskCacheDir(App.getContext(), "img");
+            File cacheDir = AppUtils.getDiskCacheDir(context, "img");
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
@@ -125,7 +131,7 @@ public class AsyncImageLoader {
      * @param key
      * @param bitmap
      */
-    public void putBitmapToDisk(String key, Bitmap bitmap) {
+    private void putBitmapToDisk(String key, Bitmap bitmap) {
         try {
             DiskLruCache.Editor editor = mDiskCache.edit(hashKeyForDisk(key));
             if (null != editor) {
@@ -150,8 +156,20 @@ public class AsyncImageLoader {
      * @return 如需网络下载，则返回true
      */
     public boolean loadImage(final ImageView imageView, String url) {
-        // 判断是否强制下载
-        // 先从内存中获取
+        return loadImage(imageView, url, true);
+    }
+
+    /**
+     * 加载图片
+     *
+     * @param imageView
+     * @param url
+     * @param isIdle    在listview中，监听listview的滚动状态，滚动为false，不滚动为true
+     * @return
+     */
+    public boolean loadImage(final ImageView imageView, String url, boolean isIdle) {
+        imageView.setTag(url);
+
         Bitmap bitmap = getBitmapFromMemory(url);
         if (null != bitmap) {
             imageView.setImageBitmap(bitmap);
@@ -159,15 +177,17 @@ public class AsyncImageLoader {
         }
 
         // 再从磁盘中获取
-        bitmap = getBitmapFromDisk(url);
-        if (null != bitmap) {
-            putBitmapToMemory(url, bitmap);
-            imageView.setImageBitmap(bitmap);
-            return false;
-        }
+//        bitmap = getBitmapFromDisk(url);
+//        if (null != bitmap) {
+//            putBitmapToMemory(url, bitmap);
+//            imageView.setImageBitmap(bitmap);
+//            return false;
+//        }
 
         // 下载图片
-        new ImageDownloadTask(imageView).execute(url);
+        if (isIdle) {
+            new ImageDownloadTask(imageView).execute(url);
+        }
 
         return true;
     }
@@ -181,6 +201,8 @@ public class AsyncImageLoader {
 
         private String imgUrl;
         private ImageView imageView;
+
+        private int resId;
 
         public ImageDownloadTask(ImageView imageView) {
             this.imageView = imageView;

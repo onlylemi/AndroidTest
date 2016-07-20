@@ -1,6 +1,7 @@
 package com.onlylemi.test7_listview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,12 @@ import java.util.List;
  */
 public class ImageAdapter extends BaseAdapter {
 
+    private static final String TAG = ImageAdapter.class.getSimpleName();
+
     private List<String> list;
     private Context context;
+
+    private boolean isIdle = true;
 
     public ImageAdapter() {
         list = new ArrayList<>();
@@ -62,17 +67,24 @@ public class ImageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.image.setTag(url);
-        if (!url.isEmpty()) {
-            if (AsyncImageLoader.getInstance().loadImage(holder.image, url)) {
-                holder.image.setImageResource(R.mipmap.ic_launcher);
-            }
+        if (AsyncImageLoader.with(context).loadImage(holder.image, url, isIdle)) {
+            holder.image.setImageResource(R.mipmap.ic_launcher);
         }
+
+        Log.i(TAG, "getView: " + position + " : " + isIdle);
 
         return convertView;
     }
 
     static class ViewHolder {
         ImageView image;
+    }
+
+    public boolean isIdle() {
+        return isIdle;
+    }
+
+    public void setIdle(boolean idle) {
+        isIdle = idle;
     }
 }

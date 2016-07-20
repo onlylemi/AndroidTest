@@ -1,10 +1,28 @@
 package com.onlylemi.test7_listview;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.IOException;
 import java.util.Arrays;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,20 +88,132 @@ public class MainActivity extends AppCompatActivity {
             "http://img.my.csdn.net/uploads/201508/05/1438760420_7188.jpg",
             "http://img.my.csdn.net/uploads/201508/05/1438760419_4123.jpg",
     };
+    private static final String TAG = MainActivity.class.getSimpleName();
 
+    private LinearLayout layout;
     private ListView listView;
     private ImageAdapter adapter;
+
+    private ImageView headerImage;
+
+    private OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView = (ListView) findViewById(R.id.listivew);
+        headerImage = (ImageView) findViewById(R.id.header_imageview);
+//        Picasso.with(this)
+//                .load(IMAGE_URLS[0])
+//                .into(headerImage);
+
+
+//        Request request = new Request.Builder().url(IMAGE_URLS[0]).build();
+//            Response response = client.newCall(request).execute();
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, final Response response) throws IOException {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+//                        headerImage.setImageBitmap(bitmap);
+//                    }
+//                });
+//            }
+//        });
+
+        Glide.with(this)
+                .load(IMAGE_URLS[0])
+                .into(headerImage);
+
+        layout = (LinearLayout) findViewById(R.id.linearlayout);
+        listView = (ListView) findViewById(R.id.listview);
         adapter = new ImageAdapter();
         listView.setAdapter(adapter);
+        final int height = getWindowManager().getDefaultDisplay().getHeight();
+        Log.i(TAG, "onCreate: " + height);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    adapter.setIdle(true);
+                    adapter.notifyDataSetChanged();
+                    if (listView.getHeight() != height) {
+                        ObjectAnimator.ofInt(ViewWrapper.decorator(listView), "height", height)
+                                .start();
+                    }
+                } else {
+                    adapter.setIdle(false);
+                }
+                Log.i(TAG, "onScrollStateChanged: " + adapter.isIdle());
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
+                                 int totalItemCount) {
+
+            }
+        });
+
+        listView.setFocusable(true);
+        listView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+        layout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                return false;
+            }
+        });
 
         adapter.bindList(Arrays.asList(IMAGE_URLS));
         adapter.notifyDataSetChanged();
+    }
+
+    private String run(String url) throws IOException {
+        Request request = new Request.Builder().url(url).build();
+
+        Response response = client.newCall(request).execute();
+        if (response.isSuccessful()) {
+            return response.body().string();
+        }
+        return null;
+    }
+
+    private void rxjava() {
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                    }
+                });
     }
 }
