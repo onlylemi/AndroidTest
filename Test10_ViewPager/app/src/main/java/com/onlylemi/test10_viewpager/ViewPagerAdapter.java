@@ -31,6 +31,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     public void bindList(List<Entity> list) {
         this.list = list;
+
     }
 
     @Override
