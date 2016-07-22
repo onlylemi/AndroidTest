@@ -8,6 +8,12 @@
     android:orientation="vertical"
     tools:context="com.onlylemi.test7_listview.MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="@string/app_name"></TextView>
+
     <com.onlylemi.test7_listview.LinearScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
