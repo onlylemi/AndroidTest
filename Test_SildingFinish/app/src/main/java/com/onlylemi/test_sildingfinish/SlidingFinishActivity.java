@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -34,24 +35,26 @@ public class SlidingFinishActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         decorView = getWindow().getDecorView();
+        decorView.setBackgroundColor(Color.parseColor("#fff9f9f9"));
+
         screenW = AppUtils.screeWidth(this);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            startTouchX = event.getX();
-            if (startTouchX < 50) {
-                isSliding = true;
-                return onTouchEvent(event);
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getX() == startTouchX) {
+                isSliding = false;
             }
         }
         if (isSliding) {
             return onTouchEvent(event);
         }
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (event.getX() == startTouchX) {
-                isSliding = false;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            startTouchX = event.getX();
+            if (startTouchX < 50) {
+                // 判断为侧滑退出事件
+                isSliding = true;
             }
         }
 
@@ -67,12 +70,14 @@ public class SlidingFinishActivity extends AppCompatActivity {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_MOVE: {
+                    // 随着手指移动
                     if (moveDistX > 0) {
                         decorView.setX(moveDistX);
                     }
                     break;
                 }
                 case MotionEvent.ACTION_UP: {
+                    // 滑动屏幕一半时处理
                     if (moveDistX > screenW / 2) {
                         finish(moveDistX);
                     } else {
@@ -86,6 +91,11 @@ public class SlidingFinishActivity extends AppCompatActivity {
         return super.onTouchEvent(event);
     }
 
+    /**
+     * 退出的动画
+     *
+     * @param dist
+     */
     public void finish(float dist) {
         ValueAnimator animator = ValueAnimator.ofFloat(dist, screenW);
         animator.start();
