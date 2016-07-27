@@ -3,6 +3,7 @@ package com.onlylemi.test9_openprojectsuse;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -31,6 +32,13 @@ public class SecondActivity extends AppCompatActivity {
                         EventBus.getDefault().post(new MessageEvent("message"));
                     }
                 }).start();
+            }
+        });
+
+        button.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
             }
         });
     }
