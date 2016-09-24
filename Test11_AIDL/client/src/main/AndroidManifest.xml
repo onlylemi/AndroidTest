@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.onlylemi.test11_aidl">
+    package="com.onlylemi.aidl.remote">
 
     <application
         android:allowBackup="true"
@@ -10,12 +10,12 @@
         android:theme="@style/AppTheme">
 
         <service
-            android:name="com.onlylemi.aidl.remote.RemoteService"
+            android:name=".RemoteService"
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name="com.onlylemi.aidl.remote.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
