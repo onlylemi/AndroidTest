@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme">
 
         <service
-            android:name="com.onlylemi.aidl.remote.RemoteService"
+            android:name=".test1.RemoteService"
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />

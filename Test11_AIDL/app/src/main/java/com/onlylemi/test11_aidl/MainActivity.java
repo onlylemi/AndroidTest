@@ -12,12 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.onlylemi.test11_aidl.test1.RemoteService;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    public static final String REMOTE_SERVICE_PACKAGE_NAME = "com.onlylemi.aidl.remote";
-    public static final String REMOTE_SERVICE_COMPONENT_NAME = "com.onlylemi.aidl.remote.RemoteService";
 
     private Button bindBtn;
     private Button unbindBtn;
@@ -60,8 +59,7 @@ public class MainActivity extends AppCompatActivity {
         bindBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(REMOTE_SERVICE_PACKAGE_NAME, REMOTE_SERVICE_COMPONENT_NAME));
+                Intent intent = new Intent(MainActivity.this, RemoteService.class);
                 bindService(intent, conn, BIND_AUTO_CREATE);
             }
         });
