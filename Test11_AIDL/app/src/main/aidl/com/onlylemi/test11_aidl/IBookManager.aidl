@@ -8,7 +8,7 @@ interface IBookManager {
 
     List<Book> getBooks();
 
-    Book getBook();
+    Book getBook(int id);
 
     int getBooksCount();
 

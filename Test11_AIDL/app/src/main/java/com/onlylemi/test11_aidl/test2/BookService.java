@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.onlylemi.test11_aidl.IBookManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,26 +19,29 @@ import java.util.List;
  */
 public class BookService extends Service {
 
+    private List<Book> books = new ArrayList<>();
+
     private IBinder binder = new IBookManager.Stub() {
         @Override
         public List<Book> getBooks() throws RemoteException {
-            return null;
+            return books;
         }
 
         @Override
-        public Book getBook() throws RemoteException {
-            return null;
+        public Book getBook(int id) throws RemoteException {
+            return books.get(id);
         }
 
         @Override
         public int getBooksCount() throws RemoteException {
-            return 0;
+            return books.size();
         }
 
         @Override
         public void addBook(Book book) throws RemoteException {
-
+            books.add(book);
         }
+
     };
 
     @Override

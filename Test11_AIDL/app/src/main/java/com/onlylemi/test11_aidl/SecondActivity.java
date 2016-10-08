@@ -5,36 +5,40 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Process;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-import com.onlylemi.test11_aidl.test1.RemoteService;
+import com.onlylemi.test11_aidl.test2.Book;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class SecondActivity extends AppCompatActivity {
+
+    private static final String TAG = SecondActivity.class.getSimpleName();
+
+    public static final String PACKAGE_NAME = "com.onlylemi.test11_aidl";
+    public static final String SERVICE_NAME = "com.onlylemi.test11_aidl.test2.BookService";
 
     private Button bindBtn;
     private Button unbindBtn;
-    private Button setMsgBtn;
+    private Button addBookBtn;
+    private Button showBooksBtn;
+    private TextView booksTv;
 
-    private IRemoteService mService = null;
+    private IBookManager mService = null;
 
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             Log.i(TAG, "onServiceConnected: ");
-
-            mService = IRemoteService.Stub.asInterface(iBinder);
-
-            Log.i(TAG, "onServiceConnected: " + Process.myPid());
+            mService = IBookManager.Stub.asInterface(iBinder);
 
             try {
-                Log.i(TAG, "onServiceConnected: msg=" + mService.getMsg() + " pid=" + mService.getPid());
+                mService.addBook(new Book(mService.getBooksCount(), "Android"));
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -50,16 +54,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_second);
 
         bindBtn = (Button) findViewById(R.id.bind_btn);
         unbindBtn = (Button) findViewById(R.id.unbind_btn);
-        setMsgBtn = (Button) findViewById(R.id.setmsg_btn);
+        addBookBtn = (Button) findViewById(R.id.add_book_btn);
+        showBooksBtn = (Button) findViewById(R.id.show_books_btn);
+        booksTv = (TextView) findViewById(R.id.books_tv);
 
         bindBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, RemoteService.class);
+                Intent intent = new Intent();
+                // 通过组件名，启动 service
+                intent.setComponent(new ComponentName(PACKAGE_NAME, SERVICE_NAME));
                 bindService(intent, conn, BIND_AUTO_CREATE);
             }
         });
@@ -69,27 +77,32 @@ public class MainActivity extends AppCompatActivity {
                 unbindService(conn);
             }
         });
-        setMsgBtn.setOnClickListener(new View.OnClickListener() {
+        addBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mService == null) {
                     Log.i(TAG, "onClick: mService is null");
                     return;
                 }
-
                 try {
-                    mService.setMsg("from client");
-                    Log.i(TAG, "onClick: " + mService.getMsg());
-
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+                    int n = mService.getBooksCount();
+                    mService.addBook(new Book(n, "Android " + n));
+                    Log.i(TAG, "onClick: " + mService.getBook(n));
+                } catch (RemoteException e1) {
+                    e1.printStackTrace();
                 }
             }
         });
-        findViewById(R.id.next_activity).setOnClickListener(new View.OnClickListener() {
+        showBooksBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SecondActivity.class));
+                try {
+                    List<Book> books = mService.getBooks();
+                    Log.i(TAG, "onClick: " + books);
+                    booksTv.setText(books.toString());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

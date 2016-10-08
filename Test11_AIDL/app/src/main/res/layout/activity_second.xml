@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.onlylemi.test11_aidl.MainActivity">
+    tools:context="com.onlylemi.test11_aidl.SecondActivity">
 
     <Button
         android:id="@+id/bind_btn"
@@ -23,14 +23,19 @@
         android:text="unbind" />
 
     <Button
-        android:id="@+id/setmsg_btn"
+        android:id="@+id/add_book_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="set msg" />
+        android:text="add book" />
 
     <Button
+        android:id="@+id/show_books_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/next_activity"
-        android:text="next"/>
+        android:text="show books"/>
+
+    <TextView
+        android:id="@+id/books_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
