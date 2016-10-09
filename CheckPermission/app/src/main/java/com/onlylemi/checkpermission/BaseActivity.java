@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -27,11 +25,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_PERMISSION = 2020; //权限请求码
     private boolean isNeedCheckPermission = true; //判断是否需要检测，防止无限弹框申请权限
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected void onResume() {
@@ -81,8 +74,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return
      */
     protected boolean isGrantedAllPermission() {
-        List<String> needRequestPermissonList = getDeniedPermissions(getNeedPermissions());
-        return needRequestPermissonList.size() == 0;
+        List<String> needRequestPermissionList = getDeniedPermissions(getNeedPermissions());
+        return needRequestPermissionList.size() == 0;
     }
 
     /**
