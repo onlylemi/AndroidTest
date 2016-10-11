@@ -102,10 +102,10 @@ public class MainActivity extends AppCompatActivity {
         inject.inject((PathClassLoader) getClassLoader(), dexLoader);
     }
 
-    public void loadProxiedActivity() {
+    public void loadProxyActivity() {
         String className = getIntent().getStringExtra("com.onlylemi.plugin.first.Entrace");
 
-        Log.i(TAG, "loadProxiedActivity: 传入的类名为：" + className);
+        Log.i(TAG, "loadProxyActivity: 传入的类名为：" + className);
 
         try {
             Class<?> clazz = dexLoader.loadClass(className);
