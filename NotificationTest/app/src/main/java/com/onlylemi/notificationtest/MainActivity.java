@@ -36,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private AlarmManager alarmManager;
+    private PendingIntent pi;
+
+    private Timer timer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +58,20 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button2:
                 showByHandler();
                 break;
+            case R.id.button22:
+                removeTaskByHandler();
+                break;
             case R.id.button3:
                 showByAlarmManager();
                 break;
+            case R.id.button33:
+                removeTaskByAlarmManager();
+                break;
             case R.id.button4:
                 showByTimer();
+                break;
+            case R.id.button44:
+                removeTaskByTimer();
                 break;
         }
     }
@@ -127,29 +141,47 @@ public class MainActivity extends AppCompatActivity {
     public void showByHandler() {
         Log.i(TAG, "showByHandler: ");
 
-        mHandler.sendEmptyMessageDelayed(0, 5 * 1000);
+        int what = 0;
+        mHandler.sendEmptyMessageDelayed(what, 5 * 1000);
+    }
+
+    public void removeTaskByHandler() {
+        mHandler.removeMessages(0);
     }
 
     public void showByAlarmManager() {
         Log.i(TAG, "showByAlarmManager: ");
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), ShowNotificationBroadcast.class);
         intent.putExtra("notification", getNotification());
-        PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pi = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5 * 1000, pi);
+    }
+
+    public void removeTaskByAlarmManager() {
+        if (pi == null) return;
+
+        alarmManager.cancel(pi);
     }
 
     public void showByTimer() {
         Log.i(TAG, "showByTimer: ");
 
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                Log.i(TAG, "run: " + Thread.currentThread().getName());
                 showNotification();
             }
-        }, 10 * 1000);
+        }, 5 * 1000);
+    }
+
+    public void removeTaskByTimer() {
+        if (timer == null) return;
+
+        timer.cancel();
     }
 }
