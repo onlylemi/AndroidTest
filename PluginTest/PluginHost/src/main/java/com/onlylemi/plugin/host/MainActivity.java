@@ -1,5 +1,6 @@
 package com.onlylemi.plugin.host;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -25,20 +26,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initClassLoader();
+    }
 
-        findViewById(R.id.open_plugin_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openPlugin();
-            }
-        });
+    public void onClick1(View view) {
+        openPlugin();
+    }
 
-        findViewById(R.id.open_plugin_activity_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openPluginActivity();
-            }
-        });
+    public void onClick2(View view) {
+        openPluginActivity();
+    }
+
+    public void onClick3(View view) {
+        openPluginActivity21();
+    }
+
+    public void onClick4(View view) {
+        openPluginActivity22();
     }
 
     /**
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         String apkPath = Environment.getExternalStorageDirectory() + File.separator + "plugin.apk";
 
         if (!new File(apkPath).exists()){
-            Log.i(TAG, "openPlugin: 插件文件不存在！");
+            Log.i(TAG, "openPlugin: 插件文件 plugin.apk s不存在！");
             return;
         }
 
@@ -97,21 +100,28 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 打开插件中的 Activity （代理方式）
      */
-    private void openPluginActivity2() {
-        ClassInject inject = new ClassInject();
-        inject.inject((PathClassLoader) getClassLoader(), dexLoader);
-    }
-
-    public void loadProxyActivity() {
-        String className = getIntent().getStringExtra("com.onlylemi.plugin.first.Entrace");
-
-        Log.i(TAG, "loadProxyActivity: 传入的类名为：" + className);
-
-        try {
-            Class<?> clazz = dexLoader.loadClass(className);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void openPluginActivity21() {
+        String apkPath = Environment.getExternalStorageDirectory() + File.separator + "plugin.apk";
+        if (!new File(apkPath).exists()){
+            Log.i(TAG, "openPlugin: 插件文件 plugin.apk 不存在！");
+            return;
         }
+
+        Intent intent = new Intent(this, ProxyActivity.class);
+        intent.putExtra(ProxyActivity.PROXIED_CLASS_NAME, "com.xiaomi.first.MainActivity");
+        intent.putExtra(ProxyActivity.EXTRA_APK_PATH, apkPath);
+        startActivity(intent);
+    }
+    private void openPluginActivity22() {
+        String apkPath = Environment.getExternalStorageDirectory() + File.separator + "plugin.apk";
+        if (!new File(apkPath).exists()){
+            Log.i(TAG, "openPlugin: 插件文件 plugin.apk 不存在！");
+            return;
+        }
+
+        Intent intent = new Intent(this, ProxyActivity.class);
+        intent.putExtra(ProxyActivity.PROXIED_CLASS_NAME, "com.xiaomi.first.SecondActivity");
+        intent.putExtra(ProxyActivity.EXTRA_APK_PATH, apkPath);
+        startActivity(intent);
     }
 }

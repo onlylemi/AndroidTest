@@ -13,13 +13,30 @@
     <Button
         android:id="@+id/open_plugin_btn"
         android:layout_width="match_parent"
+        android:onClick="onClick1"
         android:layout_height="wrap_content"
-        android:text="打开插件"/>
+        android:text="打开插件（预注册）"/>
+
 
     <Button
         android:id="@+id/open_plugin_activity_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="打开插件中的 Activity"/>
+        android:onClick="onClick2"
+        android:text="打开插件中的 Activity（预注册）"/>
+
+    <Button
+        android:id="@+id/open_plugin_activity_btn21"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick3"
+        android:text="打开插件中的 Activity（代理）"/>
+
+    <Button
+        android:id="@+id/open_plugin_activity_btn22"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick4"
+        android:text="打开插件中的 Activity（代理）"/>
 
 </LinearLayout>

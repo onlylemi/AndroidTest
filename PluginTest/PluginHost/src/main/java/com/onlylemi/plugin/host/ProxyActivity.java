@@ -27,7 +27,7 @@ public class ProxyActivity extends AppCompatActivity {
 
         loadProxiedActivity();
 
-        setContentView(R.layout.activity_proxy);
+//        setContentView(R.layout.activity_proxy);
 
         if (proxiedActivity != null) {
             Log.i(TAG, "onCreate: 伪周期开始！");
@@ -46,31 +46,86 @@ public class ProxyActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        if (proxiedActivity != null) {
+            try {
+                Method method = proxiedActivity.getClass().getMethod("onStart", new Class[]{});
+                method.setAccessible(true);
+                method.invoke(proxiedActivity, new Object[]{});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         super.onStart();
     }
 
     @Override
     protected void onRestart() {
+        if (proxiedActivity != null) {
+            try {
+                Method method = proxiedActivity.getClass().getMethod("onRestart", new Class[]{});
+                method.setAccessible(true);
+                method.invoke(proxiedActivity, new Object[]{});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
+        if (proxiedActivity != null){
+            try {
+                Method method = proxiedActivity.getClass().getMethod("onResume", new Class[]{});
+                method.setAccessible(true);
+                method.invoke(proxiedActivity, new Object[]{});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         super.onResume();
     }
 
     @Override
     protected void onPause() {
+        if (proxiedActivity != null) {
+            try {
+                Method method = proxiedActivity.getClass().getMethod("onPause", new Class[]{});
+                method.setAccessible(true);
+                method.invoke(proxiedActivity, new Object[]{});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         super.onPause();
     }
 
     @Override
     protected void onStop() {
+        if (proxiedActivity != null) {
+            try {
+                Method method = proxiedActivity.getClass().getMethod("onStop", new Class[]{});
+                method.setAccessible(true);
+                method.invoke(proxiedActivity, new Object[]{});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
+        if (proxiedActivity != null) {
+            Log.i(TAG, "onDestroy: 为周期开始");
+            try {
+                Method method = proxiedActivity.getClass().getMethod("OnDestroy", new Class[]{});
+                method.setAccessible(true);
+                method.invoke(proxiedActivity, new Object[]{});
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         super.onDestroy();
     }
 
@@ -100,10 +155,9 @@ public class ProxyActivity extends AppCompatActivity {
      */
     private void initClassLoader() {
         String apkPath = getIntent().getStringExtra(EXTRA_APK_PATH);
-
         File file = new File(apkPath);
         if (!file.exists()) {
-            Log.i(TAG, "initClassLoader: 差价文件不存在！");
+            Log.i(TAG, "initClassLoader: 插件文件不存在！");
             return;
         }
 
