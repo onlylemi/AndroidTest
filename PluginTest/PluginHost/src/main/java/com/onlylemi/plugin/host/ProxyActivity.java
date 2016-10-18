@@ -117,9 +117,8 @@ public class ProxyActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if (proxiedActivity != null) {
-            Log.i(TAG, "onDestroy: 为周期开始");
             try {
-                Method method = proxiedActivity.getClass().getMethod("OnDestroy", new Class[]{});
+                Method method = proxiedActivity.getClass().getMethod("onDestroy", new Class[]{});
                 method.setAccessible(true);
                 method.invoke(proxiedActivity, new Object[]{});
             } catch (Exception e) {

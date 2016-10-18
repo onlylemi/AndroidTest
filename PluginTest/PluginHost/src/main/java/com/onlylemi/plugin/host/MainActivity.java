@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, ProxyActivity.class);
-        intent.putExtra(ProxyActivity.PROXIED_CLASS_NAME, "com.xiaomi.first.MainActivity");
+        intent.putExtra(ProxyActivity.PROXIED_CLASS_NAME, "com.onlylemi.plugin.first.MainActivity");
         intent.putExtra(ProxyActivity.EXTRA_APK_PATH, apkPath);
         startActivity(intent);
     }
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, ProxyActivity.class);
-        intent.putExtra(ProxyActivity.PROXIED_CLASS_NAME, "com.xiaomi.first.SecondActivity");
+        intent.putExtra(ProxyActivity.PROXIED_CLASS_NAME, "com.onlylemi.plugin.first.SecondActivity");
         intent.putExtra(ProxyActivity.EXTRA_APK_PATH, apkPath);
         startActivity(intent);
     }
